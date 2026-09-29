@@ -9,7 +9,7 @@ class Auth extends BaseController
     public function loginForm()
     {
         if (session()->get('isLoggedIn')) {
-            return redirect()->to('/customers');
+            return redirect()->to('/tasks');
         }
 
         return view('auth/login');
@@ -17,19 +17,14 @@ class Auth extends BaseController
 
     public function login()
     {
-        $rules = [
+        if (! $this->validate([
             'username' => 'required|max_length[50]',
             'password' => 'required',
-        ];
-
-        if (! $this->validate($rules)) {
+        ])) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with(
-                    'errors',
-                    $this->validator->getErrors()
-                );
+                ->with('errors', $this->validator->getErrors());
         }
 
         $username = trim(
@@ -38,36 +33,31 @@ class Auth extends BaseController
 
         $password = (string) $this->request->getPost('password');
 
-        $userModel = new UserModel();
-
-        $user = $userModel
+        $user = (new UserModel())
             ->where('username', $username)
             ->first();
 
         if (
             $user === null
+            || empty($user['password'])
             || ! password_verify($password, $user['password'])
         ) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with(
-                    'error',
-                    'Invalid username or password.'
-                );
+                ->with('error', 'Invalid username or password.');
         }
 
-        // Replace the anonymous session ID after successful login.
         session()->regenerate(true);
 
         session()->set([
-            'user_id'    => $user['id'],
-            'username'   => $user['username'],
-            'full_name'  => $user['full_name'],
+            'user_id' => $user['id'],
+            'username' => $user['username'],
+            'full_name' => $user['full_name'],
             'isLoggedIn' => true,
         ]);
 
-        return redirect()->to('/customers');
+        return redirect()->to('/tasks');
     }
 
     public function logout()
@@ -77,3 +67,4 @@ class Auth extends BaseController
         return redirect()->to('/login');
     }
 }
+

@@ -2,74 +2,22 @@
 
 use CodeIgniter\Router\RouteCollection;
 
-/**
- * @var RouteCollection $routes
- */
+/** @var RouteCollection $routes */
+$routes->setAutoRoute(false);
 
 // Public pages
-$routes->get('/', 'Pages::home');
+$routes->get('/', 'Welcome::index');
+$routes->get('tasks', 'Tasks::index');
+$routes->get('profile', 'Profile::index');
 $routes->get('about', 'Pages::about');
-
-// Authentication pages
 $routes->get('login', 'Auth::loginForm');
 $routes->post('login', 'Auth::login');
-$routes->post('logout', 'Auth::logout');
 
-// Protected account-management pages
-$routes->group(
-    '',
-    ['filter' => 'auth'],
-    static function (RouteCollection $routes): void {
-        // Customer routes
-        $routes->get(
-            'customers',
-            'Customers::index'
-        );
+// Protected task-management actions
+$routes->get('tasks/new', 'Tasks::new', ['filter' => 'auth']);
+$routes->post('tasks', 'Tasks::create', ['filter' => 'auth']);
+$routes->get('tasks/(:num)/edit', 'Tasks::edit/$1', ['filter' => 'auth']);
+$routes->post('tasks/(:num)', 'Tasks::update/$1', ['filter' => 'auth']);
+$routes->post('tasks/(:num)/archive', 'Tasks::archive/$1', ['filter' => 'auth']);
+$routes->post('logout', 'Auth::logout', ['filter' => 'auth']);
 
-        $routes->get(
-            'customers/new',
-            'Customers::new'
-        );
-
-        $routes->post(
-            'customers/create',
-            'Customers::create'
-        );
-
-        $routes->get(
-            'customers/(:num)/edit',
-            'Customers::edit/$1'
-        );
-
-        $routes->post(
-            'customers/(:num)/update',
-            'Customers::update/$1'
-        );
-
-        // User routes
-        $routes->get(
-            'users',
-            'Users::index'
-        );
-
-        $routes->get(
-            'users/new',
-            'Users::new'
-        );
-
-        $routes->post(
-            'users/create',
-            'Users::create'
-        );
-
-        $routes->get(
-            'users/(:num)/edit',
-            'Users::edit/$1'
-        );
-
-        $routes->post(
-            'users/(:num)/update',
-            'Users::update/$1'
-        );
-    }
-);

@@ -8,17 +8,12 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class AuthFilter implements FilterInterface
 {
-    public function before(
-        RequestInterface $request,
-        $arguments = null
-    ) {
+    public function before(RequestInterface $request, $arguments = null)
+    {
         if (! session()->get('isLoggedIn')) {
             return redirect()
                 ->to('/login')
-                ->with(
-                    'error',
-                    'Please log in to access that page.'
-                );
+                ->with('error', 'Please log in to manage tasks.');
         }
     }
 
@@ -27,6 +22,6 @@ class AuthFilter implements FilterInterface
         ResponseInterface $response,
         $arguments = null
     ) {
-        // Nothing needs to happen after the controller.
     }
 }
+

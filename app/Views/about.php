@@ -1,24 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-</head>
-<body>
+<?= $this->extend('layouts/main') ?>
 
-<?= view('navigation') ?>
+<?= $this->section('content') ?>
 
-<h1>About the System</h1>
+<h1>About</h1>
 
 <p>
-    This task management system displays today's tasks, a complete task
-    list, and a demo user profile.
+    This Tasks for Today Management System was developed by
+    Sean Daniel Sarmiento.
 </p>
 
-<p>
-    Developed by Sean Daniel Sarmiento.
-</p>
+<?= $this->endSection() ?>
 
-</body>
-</html>

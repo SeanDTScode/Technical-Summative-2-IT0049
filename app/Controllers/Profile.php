@@ -8,12 +8,11 @@ class Profile extends BaseController
 {
     public function index()
     {
-        $userModel = new UserModel();
-
-        $data = [
-            'user' => $userModel->first(),
-        ];
-
-        return view('profile', $data);
+        return view('profile', [
+            'user' => (new UserModel())
+                ->orderBy('id', 'ASC')
+                ->first(),
+        ]);
     }
 }
+
